@@ -22,7 +22,7 @@ Rectangle {
 
         property real count: 0
 
-        text: '<font color="#f7d303">Moonkin has eaten '+ count+ ' peaches!!!</font>'
+        text: '<font color="#f7d303"> You ate peach!! </font>'
                     font.pixelSize: 14
                     textFormat: Text.StyledText
 
@@ -50,8 +50,8 @@ Rectangle {
                 Transition {
                     from: "chasing"
                     to: "nomnomnom"
-                    NumberAnimation { properties: "x"; from: rectangle1.x+rectangle1.width/2; to:area1.mouseX+60 ; duration: 100 }
-                    NumberAnimation { properties: "y"; from: rectangle1.y+rectangle1.height/2; to:area1.mouseY-60 ; duration: 100 }
+                    NumberAnimation { properties: "x"; from: rectangle1.x+rectangle1.width/2; to: score.x ; duration: 150 }
+                    NumberAnimation { properties: "y"; from: rectangle1.y+rectangle1.height/2; to:score.y ; duration: 150 }
 
                 }
             ]
@@ -62,14 +62,32 @@ Rectangle {
         text: "SCORE: "+ winText.count
     }
 
+    property bool key_W_pressed:false
+    property bool key_A_pressed:false
+    property bool key_D_pressed:false
+    property bool key_S_pressed:false
+
+
+
     Keys.onPressed: {
+        console.log("any key pressed")
+
+        if ( event.key == Qt.Key_W ) key_W_pressed=true;
+        if ( event.key == Qt.Key_A ) key_A_pressed=true;
+        if ( event.key == Qt.Key_D ) key_D_pressed=true;
+        if ( event.key == Qt.Key_S ) key_S_pressed=true;
+
+        /*if ( event.key == Qt.Key_W ){ key_W_pressed=true; console.log("W pressed")}
+        if ( event.key == Qt.Key_A ){ key_A_pressed=true; console.log("A pressed")}
+        if ( event.key == Qt.Key_D ){ key_D_pressed=true; console.log("D pressed")}
+        if ( event.key == Qt.Key_S ){ key_S_pressed=true; console.log("S pressed")}//*/
+
         var speed=5
         //rectangle1.color = "#8000FF00"
+        var angle=(rectangle1.rotation+180)* Math.PI / 180
 
-        // sqrt( sqr (x-x+5)+ sqr(y-y)) =5
-        // 2*speed*sin(rectangle1.rotation)
-        if ( event.key == Qt.Key_W ){
-            var angle=(rectangle1.rotation+180)* Math.PI / 180
+
+        if (key_W_pressed){
             if (Math.abs(rectangle1.x+rectangle1.width/2-area1.mouseX) <= Math.abs((speed+45)*Math.cos(angle)) &&
                     Math.abs(rectangle1.y+rectangle1.height/2-area1.mouseY) <= Math.abs((speed+45)*Math.sin(angle))){
                 if (winText.state=="chasing"){
@@ -86,15 +104,14 @@ Rectangle {
                 rectangle1.y+=speed*Math.sin(angle)
             }
         }
-        if ( event.key == Qt.Key_A ){
+        if (key_A_pressed){
             rectangle1.rotation-=speed*2
         }
-        if ( event.key == Qt.Key_S ){
-            var angle=(rectangle1.rotation+180)* Math.PI / 180
+        if (key_S_pressed){
             rectangle1.x-=speed*Math.cos(angle)
             rectangle1.y-=speed*Math.sin(angle)
         }
-        if ( event.key == Qt.Key_D ){
+        if (key_D_pressed){
             rectangle1.rotation+=speed*2
         }
         //event.accepted = true;
@@ -102,6 +119,15 @@ Rectangle {
     }
 
     Keys.onReleased: {
+        if ( event.key == Qt.Key_W ) key_W_pressed=false;
+        if ( event.key == Qt.Key_A ) key_A_pressed=false;
+        if ( event.key == Qt.Key_D ) key_D_pressed=false;
+        if ( event.key == Qt.Key_S ) key_S_pressed=false;
+
+        /*if ( event.key == Qt.Key_W ){ key_W_pressed=false; console.log("W released")}
+        if ( event.key == Qt.Key_A ){ key_A_pressed=false; console.log("A released")}
+        if ( event.key == Qt.Key_D ){ key_D_pressed=false; console.log("D released")}
+        if ( event.key == Qt.Key_S ){ key_S_pressed=false; console.log("S released")}//*/
         //rectangle1.color = "#800000FF"
     }
 
@@ -118,7 +144,10 @@ Rectangle {
         }
 
         onPressed:{
-
+            console.log("Key_A "+mainRect.key_A_pressed)
+            console.log("Key_W "+mainRect.key_W_pressed)
+            console.log("Key_S "+mainRect.key_S_pressed)
+            console.log("Key_D "+mainRect.key_D_pressed)
         }//*/
         onReleased: {
 
